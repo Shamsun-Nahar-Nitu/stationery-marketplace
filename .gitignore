@@ -1,0 +1,79 @@
+# ---- Python / Django ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+
+# Django stuff
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+# Media uploads (keep in storage; don't commit user uploads)
+media/
+
+# Collected static files (generated)
+staticfiles/
+
+# ---- Environment / secrets ----
+.env
+.env.*
+!.env.example
+
+# ---- Virtual environments ----
+venv/
+.venv/
+env/
+ENV/
+
+# ---- Packaging / build ----
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# ---- Testing / coverage ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ---- Type checking ----
+.mypy_cache/
+.pyright/
+.pytype/
+
+# ---- Jupyter / notebooks ----
+.ipynb_checkpoints/
+
+# ---- OS files ----
+.DS_Store
+Thumbs.db
+
+# ---- VS Code ----
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# ---- JetBrains ----
+.idea/
+
+# ---- Ruff / Lint tools ----
+.ruff_cache/
+
+# ---- Node (only if you later add frontend tooling) ----
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ---- Postgres local artifacts (rare, but safe) ----
+*.pid
