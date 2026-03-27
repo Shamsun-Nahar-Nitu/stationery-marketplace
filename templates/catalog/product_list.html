@@ -12,11 +12,18 @@
           {% if p.category %} ({{ p.category.name }}){% endif %}
           — Seller: {{ p.seller.store_name }}
           — Stock: {{ p.stock }}
+          {% if p.stock > 0 and p.stock <= 5 %}
+            <span style="color: #b45309;"><b>Only {{ p.stock }} left!</b></span>
+          {% endif %}
 
-          <form method="post" action="{% url 'cart:add' p.id %}" style="display:inline;">
-            {% csrf_token %}
-            <button type="submit">Add to cart</button>
-          </form>
+          {% if p.stock > 0 %}
+            <form method="post" action="{% url 'cart:add' p.id %}" style="display:inline;">
+              {% csrf_token %}
+              <button type="submit">Add to cart</button>
+            </form>
+          {% else %}
+            <span><b>Out of stock</b></span>
+          {% endif %}
         </li>
       {% endfor %}
     </ul>

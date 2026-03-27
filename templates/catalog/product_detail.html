@@ -5,6 +5,7 @@
 
   <p><b>Price:</b> ${{ product.price }}</p>
   <p><b>Seller:</b> {{ product.seller.store_name }}</p>
+
   {% if product.category %}
     <p><b>Category:</b> {{ product.category.name }}</p>
   {% endif %}
@@ -13,12 +14,21 @@
     <p><b>Description:</b> {{ product.description }}</p>
   {% endif %}
 
-  <p><b>Stock:</b> {{ product.stock }}</p>
+  <p>
+    <b>Stock:</b> {{ product.stock }}
+    {% if product.stock > 0 and product.stock <= 5 %}
+      <span style="color: #b45309;"><b>Only {{ product.stock }} left!</b></span>
+    {% endif %}
+  </p>
 
-  <form method="post" action="{% url 'cart:add' product.id %}">
-    {% csrf_token %}
-    <button type="submit">Add to cart</button>
-  </form>
+  {% if product.stock > 0 %}
+    <form method="post" action="{% url 'cart:add' product.id %}">
+      {% csrf_token %}
+      <button type="submit">Add to cart</button>
+    </form>
+  {% else %}
+    <p><b>Out of stock</b></p>
+  {% endif %}
 
   <p><a href="{% url 'catalog:product_list' %}">← Back to products</a></p>
 {% endblock %}
