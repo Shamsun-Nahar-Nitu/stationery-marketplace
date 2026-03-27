@@ -1,21 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Products</h1>
+  <h1>{{ product.name }}</h1>
 
-  {% if products %}
-    <ul>
-      {% for p in products %}
-        <li>
-          <a href="{% url 'catalog:product_detail' p.slug %}">{{ p.name }}</a>
-          — ${{ p.price }}
-          {% if p.category %} ({{ p.category.name }}){% endif %}
-          — Seller: {{ p.seller.store_name }}
-          — Stock: {{ p.stock }}
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>No products yet.</p>
+  <p><b>Price:</b> ${{ product.price }}</p>
+  <p><b>Seller:</b> {{ product.seller.store_name }}</p>
+  {% if product.category %}
+    <p><b>Category:</b> {{ product.category.name }}</p>
   {% endif %}
+
+  {% if product.description %}
+    <p><b>Description:</b> {{ product.description }}</p>
+  {% endif %}
+
+  <p><b>Stock:</b> {{ product.stock }}</p>
+
+  <form method="post" action="{% url 'cart:add' product.id %}">
+    {% csrf_token %}
+    <button type="submit">Add to cart</button>
+  </form>
+
+  <p><a href="{% url 'catalog:product_list' %}">← Back to products</a></p>
 {% endblock %}

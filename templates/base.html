@@ -5,6 +5,12 @@
     <title>Stationery Marketplace</title>
   </head>
   <body>
+    <nav>
+      <a href="/">Products</a> |
+      <a href="{% url 'cart:detail' %}">Cart</a>
+    </nav>
+    <hr>
+
     {% block content %}{% endblock %}
   </body>
 </html>
