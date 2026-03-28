@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Checkout</h1>
+
+  {% if items %}
+    <table border="1" cellpadding="6" cellspacing="0">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Line total</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in items %}
+          <tr>
+            <td>{{ item.product.name }}</td>
+            <td>${{ item.product.price }}</td>
+            <td>{{ item.qty }}</td>
+            <td>${{ item.line_total }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p><b>Total:</b> ${{ total }}</p>
+
+    <form method="post" action="{% url 'orders:place' %}">
+      {% csrf_token %}
+      <button type="submit">Place order</button>
+    </form>
+
+    <p><a href="{% url 'cart:detail' %}">← Back to cart</a></p>
+  {% else %}
+    <p>Your cart is empty.</p>
+    <p><a href="{% url 'catalog:product_list' %}">Go to products</a></p>
+  {% endif %}
+{% endblock %}
