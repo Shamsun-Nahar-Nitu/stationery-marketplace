@@ -7,7 +7,8 @@
   <body>
     <nav>
       <a href="/">Products</a> |
-      <a href="{% url 'cart:detail' %}">Cart ({{ cart_item_count }})</a>
+      <a href="{% url 'cart:detail' %}">Cart{% if cart_item_count is not None %} ({{ cart_item_count }}){% endif %}</a> |
+      <a href="{% url 'orders:my_orders' %}">My Orders</a>
     </nav>
     <hr>
 
