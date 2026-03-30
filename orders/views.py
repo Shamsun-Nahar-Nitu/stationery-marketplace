@@ -12,7 +12,6 @@ from catalog.models import Product
 from .models import Order, OrderItem
 
 
-
 @login_required
 def my_orders(request):
     orders = Order.objects.filter(user=request.user).order_by("-created_at")
@@ -41,6 +40,7 @@ def place_order(request):
     items, total = _build_cart_items(cart)
 
     if not items:
+        messages.info(request, "Your cart is empty.")
         return redirect("cart:detail")
 
     with transaction.atomic():
@@ -54,8 +54,16 @@ def place_order(request):
                 Product.objects.filter(id=product.id, stock__gte=qty)
                 .update(stock=F("stock") - qty)
             )
+
             if updated != 1:
-                raise Http404("Not enough stock to place this order. Please update your cart.")
+                # Stock changed between checkout page load and placing the order
+                messages.error(
+                    request,
+                    f"Sorry, '{product.name}' doesn't have enough stock to fulfill your order. "
+                    "Please review your cart and try again."
+                )
+                # Rollback transaction
+                raise transaction.TransactionManagementError("Insufficient stock during checkout.")
 
             OrderItem.objects.create(
                 order=order,
@@ -64,7 +72,9 @@ def place_order(request):
                 quantity=qty,
             )
 
+        # Clear cart after successful order
         request.session["cart"] = {}
         request.session.modified = True
 
+    messages.success(request, f"Order #{order.id} placed successfully.")
     return redirect("orders:detail", order_id=order.id)
