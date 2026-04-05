@@ -128,15 +128,6 @@ Then visit `/` and add the product to the cart.
 
 ---
 
-## Roadmap (planned)
-- Customer accounts / authentication flows
-- Checkout + orders
-- Payments integration
-- Vendor dashboard (manage products, inventory)
-- Search / filters
-- Product images, reviews, ratings
-- Tests + CI
-
 ---
 
 
