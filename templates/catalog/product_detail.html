@@ -26,8 +26,56 @@
       {% csrf_token %}
       <button type="submit">Add to cart</button>
     </form>
+    {% if user.is_authenticated %}
+      {% if is_in_wishlist %}
+        <form method="post" action="{% url 'wishlist:remove' product.id %}" style="margin-top: 8px;">
+          {% csrf_token %}
+          <button type="submit">Remove from wishlist</button>
+        </form>
+      {% else %}
+        <form method="post" action="{% url 'wishlist:add' product.id %}" style="margin-top: 8px;">
+          {% csrf_token %}
+          <button type="submit">Add to wishlist</button>
+        </form>
+      {% endif %}
+    {% endif %}
   {% else %}
     <p><b>Out of stock</b></p>
+  {% endif %}
+
+  <hr>
+  <h2>Reviews</h2>
+  {% if reviews %}
+    <ul>
+      {% for r in reviews %}
+        <li>
+          <b>{{ r.user.username }}</b> — {{ r.rating }}/5
+          {% if r.title %} — <b>{{ r.title }}</b>{% endif %}
+          {% if r.body %}<br>{{ r.body }}{% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No reviews yet.</p>
+  {% endif %}
+
+  {% if user.is_authenticated %}
+    <h3>{% if user_review %}Update your review{% else %}Write a review{% endif %}</h3>
+    <form method="post" action="{% url 'reviews:upsert' product.id %}">
+      {% csrf_token %}
+      <label>Rating (1-5):</label>
+      <input type="number" name="rating" min="1" max="5" value="{% if user_review %}{{ user_review.rating }}{% else %}5{% endif %}">
+      <br><br>
+      <label>Title:</label>
+      <input type="text" name="title" value="{% if user_review %}{{ user_review.title }}{% endif %}">
+      <br><br>
+      <label>Comment:</label><br>
+      <textarea name="body" rows="4" cols="50">{% if user_review %}{{ user_review.body }}{% endif %}</textarea>
+      <br><br>
+      <button type="submit">Save review</button>
+    </form>
+  {% else %}
+    <p>Log in to add to wishlist and write a review.</p>
   {% endif %}
 
   <p><a href="{% url 'catalog:product_list' %}">← Back to products</a></p>
